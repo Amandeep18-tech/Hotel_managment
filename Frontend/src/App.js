@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Header from './components/Header';
+import Feedback from './pages/Feedback';
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from 'react';
@@ -61,6 +62,7 @@ function App() {
             <Route path="/" element={<Dashboard user = {state} setUser = {setState} auth={authProps}/>} />
             <Route path="/login" element={<Login user = {state} setUser = {setState} auth={authProps} />} />
             <Route path="/register" element={<Register user = {state} setUser = {setState} auth={authProps} />} />
+            <Route path="/feedback" element={<Feedback />} />
           </Routes>
         </Router>
     </>
