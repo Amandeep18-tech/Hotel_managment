@@ -1,19 +1,30 @@
 import Style from './index.css'
+import axios from 'axios';
 
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from "react";
-// import { toast } from "react-toastify";
-import { reset, login } from "../redux/authSlice";
-import { Button, Input, Spin, Typography } from "antd";
+import { useState } from "react";
+import { Button, Input, Spin, Typography, message } from "antd";
+import { Auth } from 'aws-amplify';
+import { CEASER_CIPHER, GET_SECURITY_QUESTION } from '../api/Api';
 
 const { Title, Text } = Typography;
 
-const Login = () => {
+const Login = (props) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [loginStage,setLoginStage] = useState('')
+  const [quetAns,setQueAns] = useState({
+      cipher: null,
+      question: null,
+      answer: null
+  })
+  const [answer,setAnswer] = useState('');
+  const [randomString,setRandomString] = useState('');
+  const [encodedString, setEndcodedString] = useState('');
+
+  const navigate = useNavigate();
 
   const { email, password } = formData;
 
@@ -24,42 +35,114 @@ const Login = () => {
     }))
   }
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth)
-
-  useEffect(() => {
-    if (isError) {
-      // toast.error(message)
-    }
-    if (isSuccess || user) {
-      navigate('/')
-    }
-    dispatch(reset);
-  }, [user, isError, isSuccess, message, navigate, dispatch])
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const userData = {
-      email,
-      password
-    }
-    dispatch(login(userData))
+  const answerHandle = (e) => {
+    setAnswer(e.target.value)
   }
 
-  if (isLoading) {
-    return <Spin size="large" />
+  const handleEncodedString = (e) => {
+    setEndcodedString(e.target.value)
   }
 
-  return (
-    <section className='section'>
-      <section className="section">
-        <Title> Log In </Title>
-        <Text>Login into account</Text>
-      </section>
+  const onSubmitWithLogin = async (e) => {
+    try {
+      const user = await Auth.signIn(email, password);
+      props.auth.setAuthStatus(true);
+      props.auth.setUser(user);
+      setLoginStage('withsecurity')
+      message.success("Authenticated Successufully with Email");
+
+
+      var data = JSON.stringify({
+        "username": user.username
+      });
+
+      var config = {
+        method: 'post',
+        url: GET_SECURITY_QUESTION,
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        data : data
+      };
+
+
+      axios(config)
+        .then(function (response) {
+          setQueAns(response.data)
+        })
+        .catch(function (error) {
+          console.log(error.message);
+        });
+
+
+    } catch (error) {
+      message.error(error.message);
+      console.log(error);
+    }
+  }
+
+  const onSubmitWithSecurity = async () => {
+      if(answer === quetAns.answer){
+         message.success("Authenticated Successufully with Security Questions");
+
+         function randomString() {
+          var result           = '';
+          var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+          var charactersLength = characters.length;
+          for ( var i = 0; i < 4; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * 
+       charactersLength));
+         }
+         return result;
+      }
+
+         setRandomString(randomString());
+        setLoginStage('withcipher')
+      }else{
+        message.error('authentication failed');
+      }
+  }
+
+  const onSubmitWithCipher = () => {
+    if (encodedString != '') {
+      
+      var data = JSON.stringify({
+        "rawText": randomString,
+        "cipher": quetAns.cipher,
+        "encryptedText": encodedString
+      });
+      
+      var config = {
+        method: 'post',
+        url: CEASER_CIPHER,
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        data : data
+      };
+      
+      axios(config)
+      .then(function (response) {
+        if(response.data.statusCode === 200){
+          message.success("Authenticated Successufully with Ceaser Cipher");
+          navigate('/')
+        }else{
+          message.error('authentication failed');
+        }
+      })
+      .catch(function (error) {
+        message.error('authentication failed');
+      });
+      
+
+    }else{
+      message.error('authentication failed')
+    }
+  }
+
+  const logInWithEmail = () => {
+    return(
       <section className="form">
-        <form onSubmit={onSubmit}>
         <Input.Group size="large">
             <Input
               style={{marginTop:'2%'}}
@@ -83,10 +166,67 @@ const Login = () => {
             />
           </ Input.Group>
           <div className='form-group'>
-            <Button type='primary' style={{marginTop:'2%'}} className='section'>Submit</Button>
+            <Button type='primary' style={{marginTop:'2%'}} className='section' onClick={onSubmitWithLogin}>Next</Button>
           </div>
-        </form>
       </section>
+    )
+  }
+
+  const logInWithSecurity = () => {
+    return(
+    <section className="form">
+        <Input.Group size="large">
+           <Title level={4} style={{marginTop:'10%'}}>{quetAns.question}</Title>
+            <Input
+              style={{marginTop:'2%'}}
+              type="type"
+              className="form-control"
+              id="answer"
+              name="answer"
+              value={answer}
+              placeholder="Enter security answer"
+              onChange={answerHandle}
+            />
+          </ Input.Group>
+          <div className='form-group'>
+            <Button type='primary' style={{marginTop:'2%'}} className='section' onClick={onSubmitWithSecurity}> Next </Button>
+          </div>
+      </section>
+    )
+  }
+
+  const logInWithCipher = () => {
+    return(
+      <section className="form">
+      <Input.Group size="large">
+         <Title level={4} style={{marginTop:'10%'}}>{randomString}</Title>
+          <Input
+            style={{marginTop:'2%'}}
+            type="type"
+            className="form-control"
+            id="encodedString"
+            name="encodedString"
+            value={encodedString}
+            placeholder="Enter your encoded string with unique cipher key"
+            onChange={handleEncodedString}
+          />
+        </ Input.Group>
+        <div className='form-group'>
+          <Button type='primary' style={{marginTop:'2%'}} className='section' onClick={onSubmitWithCipher}> Submit </Button>
+        </div>
+    </section>
+    )
+  }
+
+  return (
+    <section className='section'>
+      <section className="section">
+        <Title> Log In </Title>
+        <Text>Login into account</Text>
+      </section>
+      {
+         loginStage == 'withsecurity' ? logInWithSecurity() : loginStage == 'withcipher' ? logInWithCipher() : logInWithEmail()
+      }
     </section>
   );
 };

@@ -2,8 +2,15 @@ import { Typography } from "antd"
 
 const { Title } = Typography;
 
-export default function Dashboard(params) {
+export default function Dashboard(props) {
+
+    const user = props.user.user?.username;
+    const {isAuthenticated} = props.auth;
+
     return (
-        <Title> Dashboard </Title>
+        <>
+         {user ? <Title> Welcome {user}</Title> : <Title> HOME PAGE </Title>}
+        </>
+       
     )
 }
