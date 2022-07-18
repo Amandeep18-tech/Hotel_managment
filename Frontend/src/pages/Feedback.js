@@ -1,21 +1,31 @@
+import { SyncOutlined } from '@ant-design/icons';
 import { Typography, Spin, Tag, message, Table, Button, Rate, Input } from 'antd'
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { GET_REVIEWS } from '../api/Api';
+import { GET_REVIEWS, POST_REVIEW } from '../api/Api';
 
 const { Title, Text } = Typography;
 const { ColumnGroup, Column } = Table;
 const { TextArea } = Input;
 
-export default function Feedback(params) {
+export default function Feedback(props) {
 
-    const [getProcess, setGetProcess] = useState(true);
+    const [getProcess, setGetProcess] = useState(false);
     const [reviews, setReviews] = useState([])
+    const [feedback,setFeedback] = useState('')
+    const [refresh,setRefresh] = useState(false)
+
 
     const navigate = useNavigate();
 
+    const  username  = props.auth.user?.username || null
+ 
     useEffect(() => {
+        setGetProcess(true);
+        if(username === null){
+            navigate('/')
+        }
         loadReviews();
     }, [])
 
@@ -30,6 +40,7 @@ export default function Feedback(params) {
             .then(function (response) {
                 setReviews(response.data.data)
                 setGetProcess(false);
+                setRefresh(false);
             })
             .catch(function (error) {
                 message.error('Error while getting feedbacks')
@@ -37,30 +48,35 @@ export default function Feedback(params) {
     }
 
     function submitReview() {
-        // var data = JSON.stringify({
-        //     "username": "Sarthak",
-        //     "feedback": "You haven’t met your targets. I’m concerned it is going to drag down the team’s performance."
-        // });
+        console.log('sffdsas');
+            setGetProcess(true)
+            var data = JSON.stringify({
+                "username": username,
+                "feedback": feedback
+            });
 
-        // var config = {
-        //     method: 'post',
-        //     url: 'https://us-central1-csci-5408-w22-340718.cloudfunctions.net/addUserFeedback',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     data: data
-        // };
+            var config = {
+                method: 'post',
+                url: POST_REVIEW,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
 
-        // axios(config)
-        //     .then(function (response) {
-        //         message.success('Feedback added');
-        //         loadReviews();
-        //     })
-        //     .catch(function (error) {
-        //         message.error('Feddback failed')
-        //         console.log(error);
-        //     });
+            axios(config)
+                .then(function (response) {
+                    message.success('feedback added successfully')
+                    setGetProcess(false);
+                })
+                .catch(function (error) {
+                    message.error('Feedback failed')
+                });
     }
+
+    const handleFeeback = (e) => {
+        setFeedback(e.target.value)
+      }
 
     return (<>
         <div style={{ width: '75%', margin: 'auto' }}>
@@ -70,8 +86,9 @@ export default function Feedback(params) {
                 <div>
                     <div style={{margin:'5%'}}>
                     <TextArea placeholder="Write your feedback here"
-                        autoSize={{ minRows: 3, maxRows: 6 }} style={{ width: '60%' }} defaultValue="0571" />
+                        autoSize={{ minRows: 3, maxRows: 6 }} style={{ width: '60%' }} onChange={handleFeeback} />
                         <Button onClick={submitReview} style={{margin:'2.5%'}} type='primary'> Submit </Button>
+                        <Button onClick={()=>{ loadReviews(); setRefresh(true) }} style={{margin:'2.5%'}} > <SyncOutlined spin = {refresh} /> </Button>
                         </div>
                     <Table dataSource={reviews} key='table' rowKey='table'>
                         <Column title="User Name" dataIndex="username" key="username" />

@@ -62,7 +62,7 @@ function App() {
             <Route path="/" element={<Dashboard user = {state} setUser = {setState} auth={authProps}/>} />
             <Route path="/login" element={<Login user = {state} setUser = {setState} auth={authProps} />} />
             <Route path="/register" element={<Register user = {state} setUser = {setState} auth={authProps} />} />
-            <Route path="/feedback" element={<Feedback />} />
+            <Route path="/feedback" element={<Feedback  user = {state} setUser = {setState} auth={authProps} />} />
           </Routes>
         </Router>
     </>
