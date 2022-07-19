@@ -87,7 +87,7 @@ const Login = (props) => {
 
          function randomString() {
           var result           = '';
-          var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+          var characters       = 'abcdefghijklmnopqrstuvwxyz';
           var charactersLength = characters.length;
           for ( var i = 0; i < 4; i++ ) {
             result += characters.charAt(Math.floor(Math.random() * 
@@ -108,7 +108,7 @@ const Login = (props) => {
       
       var data = JSON.stringify({
         "rawText": randomString,
-        "cipher": quetAns.cipher,
+        "cipher":  parseInt(quetAns.cipher),
         "encryptedText": encodedString
       });
       
