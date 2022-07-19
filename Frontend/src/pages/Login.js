@@ -151,7 +151,7 @@ const Login = (props) => {
               id="email"
               name="email"
               value={email}
-              placeholder="Enter your email"
+              placeholder="Enter your username"
               onChange={dataHandle}
             />
             <Input

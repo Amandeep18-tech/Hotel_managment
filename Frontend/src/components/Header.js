@@ -34,7 +34,10 @@ export default function Header(props) {
                 title="B&B"
                 extra={
                     [user
-                        ? <Button key="3" onClick={onLogout}><Link to='/'>   logout    </Link></Button>
+                        ?<Button.Group>
+                             <Button key="3"><Link to='/feedback'>   Provide Feedback    </Link></Button>
+                             <Button key="4" type='primary' onClick={onLogout}><Link to='/'>   logout    </Link></Button>
+                        </Button.Group>
                         : <Button.Group key='1'>
                             <Button key="1"><Link to='/register'>   Register    </Link></Button>
                             <Button key="2"><Link to='/login'>   login    </Link></Button>
