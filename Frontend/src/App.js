@@ -5,11 +5,15 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Header from './components/Header';
 import Feedback from './pages/Feedback';
+import AvailTour from './pages/AvailTour';
+import FoodStatus from './pages/FoodStatus';
+import BookRooms from './pages/BookRooms';
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { Auth } from "aws-amplify";
 import { Kitchen } from './pages/Kitchen';
+import Visuals from './pages/visuals';
 
 function App() {
 
@@ -64,6 +68,10 @@ function App() {
             <Route path="/login" element={<Login user = {state} setUser = {setState} auth={authProps} />} />
             <Route path="/register" element={<Register user = {state} setUser = {setState} auth={authProps} />} />
             <Route path="/feedback" element={<Feedback  user = {state} setUser = {setState} auth={authProps} />} />
+            <Route path="/AvailTour" element={<AvailTour user = {state} setUser = {setState} auth={authProps}/>} />
+            <Route path="/ShowVisuals" element={<Visuals />} />
+            <Route path="/FoodStatus" element={<FoodStatus />} />
+            <Route path="/BookRooms" element={<BookRooms user = {state} setUser = {setState} auth={authProps}/>} />
             <Route path="/kitchen" element={<Kitchen user = {state} setUser = {setState} auth={authProps} />} />
           </Routes>
         </Router>
