@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { GET_REVIEWS, POST_REVIEW } from '../api/Api';
+import moment from 'moment'
 
 const { Title, Text } = Typography;
 const { ColumnGroup, Column } = Table;
@@ -104,7 +105,8 @@ export default function Feedback(props) {
                             )
                         }} dataIndex="score" key="score" />
                         <Column title="Date" dataIndex="date" key="date" render={(date) => {
-                            const d = date.split(' ')
+                            const seconds = date._seconds;
+                            const d = moment.unix(seconds).toDate().toUTCString().split(' ');
                             return (
                                 <Text level={5}>{d[1] + '   ' + d[2] + '  ' + d[3]}</Text>
                             )
