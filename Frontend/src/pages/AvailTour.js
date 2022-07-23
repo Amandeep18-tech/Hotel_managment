@@ -39,7 +39,7 @@ function AvailTour(props) {
     }
 
     React.useEffect(() => {
-        fetch('https://ghjyjskfovukjda4lwzc5xfyui0qtaxr.lambda-url.us-west-2.on.aws/', {
+          ('https://ghjyjskfovukjda4lwzc5xfyui0qtaxr.lambda-url.us-west-2.on.aws/', {
         method: 'POST',
         body: JSON.stringify({
           "customer_id" : props.auth.user?.username
