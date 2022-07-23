@@ -8,6 +8,8 @@ import LexChat from "react-lex";
 function Kitchen()
 {
     return (
+
+        
         <div className="kitch">
         <div className="intro">
             <h2>Welcome to our Kitchen!!</h2>
@@ -15,19 +17,7 @@ function Kitchen()
         </div>
 
         <div className="kitchen-home">
-          <LexChat
-            botName="OrderFood"
-            IdentityPoolId="us-east-1:51900eaf-399d-4560-b14c-5503228cdd9c"
-            placeholder="Order with us!"
-            backgroundColor="#FFFFFF"
-            height="430px"
-            region="us-east-1"
-            headerText="Chat with our awesome bot"
-            headerStyle={{ backgroundColor: "#ABD5D9", fontSize: "30px" }}
-            greeting={
-            "Hello, how can I help? Start chatting with me to order your favourite food!"
-            }
-        />
+          
         </div>
         </div>
     );
