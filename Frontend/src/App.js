@@ -9,6 +9,7 @@ import Feedback from './pages/Feedback';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { Auth } from "aws-amplify";
+import { Kitchen } from './pages/Kitchen';
 
 function App() {
 
@@ -63,6 +64,7 @@ function App() {
             <Route path="/login" element={<Login user = {state} setUser = {setState} auth={authProps} />} />
             <Route path="/register" element={<Register user = {state} setUser = {setState} auth={authProps} />} />
             <Route path="/feedback" element={<Feedback  user = {state} setUser = {setState} auth={authProps} />} />
+            <Route path="/kitchen" element={<Kitchen user = {state} setUser = {setState} auth={authProps} />} />
           </Routes>
         </Router>
     </>
