@@ -8,20 +8,27 @@ import LexChat from "react-lex";
 function Kitchen()
 {
     return (
+        <div className="kitch">
+        <div className="intro">
+            <h2>Welcome to our Kitchen!!</h2>
+            <h3>To start ordering chat with our chatbot!</h3>
+        </div>
+
         <div className="kitchen-home">
           <LexChat
-            botName="OrderFlowers"
-            IdentityPoolId="us-east-1:f58bf7ab-9084-45c7-9565-b905754abf92"
-            placeholder="Placeholder text"
+            botName="OrderFood"
+            IdentityPoolId="us-east-1:51900eaf-399d-4560-b14c-5503228cdd9c"
+            placeholder="Order with us!"
             backgroundColor="#FFFFFF"
             height="430px"
             region="us-east-1"
             headerText="Chat with our awesome bot"
             headerStyle={{ backgroundColor: "#ABD5D9", fontSize: "30px" }}
             greeting={
-            "Hello, how can I help? You can say things like 'help' to get more info"
+            "Hello, how can I help? Start chatting with me to order your favourite food!"
             }
         />
+        </div>
         </div>
     );
 }
