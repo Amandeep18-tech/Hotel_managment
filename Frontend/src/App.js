@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { Auth } from "aws-amplify";
 import { Kitchen } from './pages/Kitchen';
+import {FetchDyanamoDB} from './pages/FetchDynamoDB';
 
 function App() {
 
@@ -65,6 +66,7 @@ function App() {
             <Route path="/register" element={<Register user = {state} setUser = {setState} auth={authProps} />} />
             <Route path="/feedback" element={<Feedback  user = {state} setUser = {setState} auth={authProps} />} />
             <Route path="/kitchen" element={<Kitchen user = {state} setUser = {setState} auth={authProps} />} />
+            <Route path="/dynamo" element={<FetchDyanamoDB user = {state} setUser = {setUser} auth={authProps}/>} />
           </Routes>
         </Router>
     </>
