@@ -38,24 +38,24 @@ function AvailTour(props) {
       navigate('*')
     }
 
-    React.useEffect(() => {
-          ('https://ghjyjskfovukjda4lwzc5xfyui0qtaxr.lambda-url.us-west-2.on.aws/', {
-        method: 'POST',
-        body: JSON.stringify({
-          "customer_id" : props.auth.user?.username
-        })
-      }).then(function(serverPromise){ 
-        serverPromise.json()
-          .then(function(j) { 
-            console.log(j[0].tour_id); 
-            setData(j);
-          })
-          .catch(function(e){
-            console.log(e);
-          });
+  React.useEffect(() => {
+    fetch('https://ghjyjskfovukjda4lwzc5xfyui0qtaxr.lambda-url.us-west-2.on.aws/', {
+      method: 'POST',
+      body: JSON.stringify({
+        "customer_id": props.auth.user?.username,
       })
-        .catch((error) => console.log('Error while fetching:', error));
-    }, [])
+    }).then(function (serverPromise) {
+      serverPromise.json()
+        .then(function (j) {
+          console.log(j[0].tour_id);
+          setData(j);
+        })
+        .catch(function (e) {
+          console.log(e);
+        });
+    })
+      .catch((error) => console.log('Error while fetching:', error));
+  }, [])
 
     React.useEffect(() => {
       if (data.length !== 0) {
