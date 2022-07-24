@@ -15,6 +15,7 @@ import { Auth } from "aws-amplify";
 import { Kitchen } from './pages/Kitchen';
 import {FetchDyanamoDB} from './pages/FetchDynamoDB';
 import Visuals from './pages/visuals';
+import Report from './pages/Report';
 
 function App() {
 
@@ -75,6 +76,7 @@ function App() {
             <Route path="/BookRooms" element={<BookRooms user = {state} setUser = {setState} auth={authProps}/>} />
             <Route path="/kitchen" element={<Kitchen user = {state} setUser = {setState} auth={authProps} />} />
             <Route path="/dynamo" element={<FetchDyanamoDB user = {state} setUser = {setUser} auth={authProps}/>} />
+            <Route path="/report" element={<Report user = {state} setUser = {setState} auth={authProps} />} />
           </Routes>
         </Router>
     </>
