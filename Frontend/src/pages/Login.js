@@ -125,6 +125,28 @@ const Login = (props) => {
       .then(function (response) {
         if(response.data.statusCode === 200){
           message.success("Authenticated Successufully with Ceaser Cipher");
+          var data = JSON.stringify({
+            "username": formData.email
+          });
+          
+          var config = {
+            method: 'post',
+            url: 'https://us-central1-csci-5408-w22-340718.cloudfunctions.net/userActivity',
+            headers: { 
+              'Content-Type': 'application/json'
+            },
+            data : data
+          };
+          
+          axios(config)
+          .then(function (response) {
+            console.log(JSON.stringify(response.data));
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+          
+
           navigate('/')
         }else{
           message.error('authentication failed');
