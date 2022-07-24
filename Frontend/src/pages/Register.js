@@ -22,7 +22,7 @@ const Register = (props) => {
     password: "",
     securityQuestion: "",
     securityAnswer: '',
-    cipher: ''
+    cipher: 1
   });
 
   const [registerProcess, setRegistracterProcess] = useState(false);
@@ -179,7 +179,7 @@ const Register = (props) => {
                 {securityQuestion
                   ?
                   <>
-                    <Text keyboard>{securityQuestion}</Text>
+                    <Text code>{securityQuestion}</Text>
                     <Input
                       style={{ marginTop: '2%' }}
                       size="large"
